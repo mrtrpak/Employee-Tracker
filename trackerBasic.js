@@ -16,7 +16,7 @@ connection.connect(err => {
 });
 
 const start = () => {
-    inquirer.prompt({
+    inquirer.prompt ({
         name: "userOptions",
         type: "list",
         message: "What would you like to do?",
@@ -52,7 +52,25 @@ const start = () => {
 }
 
 const addDepartment = () => {
-
+    inquirer.prompt([
+        {
+            name: "departmentAddInput",
+            type: "input",
+            message: "What department would you like to add?"
+        }
+    ]).then(answer => {
+        connection.query(
+            "INSERT INTO department SET ?",
+            {
+                name: answer.departmentAddInput
+            },
+            err => {
+                if (err) throw err;
+                console.log(`Successfully added ${answer.departmentAddInput} to Departments!`);
+                start();
+            }
+        );
+    });
 }
 
 const addRole = () => {
@@ -64,7 +82,11 @@ const addEmployee = () => {
 }
 
 const viewDepartments = () => {
-
+    connection.query("SELECT * FROM department", (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        start();
+    })
 }
 
 const viewRoles = () => {
@@ -76,5 +98,5 @@ const viewEmployees = () => {
 }
 
 const updateRole = () => {
-    
+
 }
