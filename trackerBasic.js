@@ -50,3 +50,31 @@ const start = () => {
         }
     });
 }
+
+const addDepartment = () => {
+
+}
+
+const addRole = () => {
+
+}
+
+const addEmployee = () => {
+
+}
+
+const viewDepartments = () => {
+
+}
+
+const viewRoles = () => {
+
+}
+
+const viewEmployees = () => {
+
+}
+
+const updateRole = () => {
+    
+}
