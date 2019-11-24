@@ -74,27 +74,76 @@ const addDepartment = () => {
 }
 
 const addRole = () => {
-
-}
+    connection.query("SELECT * FROM department", (err, res) => {
+        if (err) throw err;
+        inquirer.prompt([
+            {
+                name: "roleAddInput",
+                type: "input",
+                message: "What is the role you want to add?"
+            },
+            {
+                name: "roleSalary",
+                type: "input",
+                message: "What is the salary?",
+                validate: value => {
+                    if (isNaN(value) === false) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
+            {
+                name: "roleDepartmentId",
+                type: "rawlist",
+                choices: () => {
+                    const choiceArray = [];
+                    for (let i = 0; i < res.length; i++) {
+                        choiceArray.push(res[i].name);
+                    }
+                    return choiceArray;
+                }
+            }
+        ]).then(answer => {
+            connection.query(
+                "INSERT INTO role SET ?",
+                {
+                    title: answer.roleAddInput,
+                    Salary: answer.roleSalary,
+                    department_id: answer.roleDepartmentId
+                },
+                err => {
+                    if (err) throw err;
+                    console.log(`Successfully added ${roleAddInput} to Roles!`);
+                    start();
+                }
+            );
+        });
+    });
+    }
 
 const addEmployee = () => {
 
 }
 
+// convenience variable for view functions
+const viewFunction = (err, res) => {
+    if (err) throw err;
+    console.table(res);
+    start();
+}
+
+
 const viewDepartments = () => {
-    connection.query("SELECT * FROM department", (err, res) => {
-        if (err) throw err;
-        console.table(res);
-        start();
-    })
+    connection.query("SELECT * FROM department", viewFunction);
 }
 
 const viewRoles = () => {
-
+    connection.query("SELECT * FROM role", viewFunction);
 }
 
 const viewEmployees = () => {
-
+    connection.query("SELECT * FROM employees", viewFunction);
 }
 
 const updateRole = () => {
