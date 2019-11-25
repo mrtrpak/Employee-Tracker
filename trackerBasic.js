@@ -97,7 +97,7 @@ const addRole = () => {
                 name: "roleDepartmentId",
                 type: "rawlist",
                 choices: () => {
-                    const choiceArray = [];
+                    let choiceArray = [];
                     for (let i = 0; i < res.length; i++) {
                         choiceArray.push(res[i].name);
                     }
@@ -123,7 +123,45 @@ const addRole = () => {
     }
 
 const addEmployee = () => {
-
+    connection.query("SELECT * FROM role", (err, res) => {
+        if (err) throw err;
+        inquirer.prompt([
+            {
+                name: "employeeFirstName",
+                type: "input",
+                message: "What is the employees FIRST name?"
+            },
+            {
+                name: "employeeLastName",
+                type: "input",
+                message: "What is the employees LAST name?"
+            },
+            {
+                name: "employeeRoleId",
+                type: "rawlist",
+                choices: () => {
+                    let choiceArray = [];
+                    for (let i = 0; i < res.length; i++) {
+                        choiceArray.push(res[i].title);
+                    }
+                    return choiceArray;
+                }
+            }
+        ]).then(answer => {
+            connection.query(
+                "INSERT INTO employees SET ?",
+                {
+                    first_name: answer.employeeFirstName,
+                    last_name: answer.employeeLastName,
+                    role_id: answer.employeeRoleId
+                },
+                err => {
+                    if (err) throw err;
+                    console.log(`Successfully added ${answer.employeeFirstName} ${answer.employeeLastName} to Employees`);
+                }
+            );
+        });
+    });
 }
 
 // convenience variable for view functions
@@ -132,7 +170,6 @@ const viewFunction = (err, res) => {
     console.table(res);
     start();
 }
-
 
 const viewDepartments = () => {
     connection.query("SELECT * FROM department", viewFunction);
