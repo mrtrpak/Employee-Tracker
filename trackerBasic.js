@@ -145,7 +145,8 @@ const addEmployee = () => {
                         choiceArray.push(res[i].title);
                     }
                     return choiceArray;
-                }
+                },
+                message: "What is their role?"
             }
         ]).then(answer => {
             connection.query(
@@ -180,9 +181,42 @@ const viewRoles = () => {
 }
 
 const viewEmployees = () => {
-    connection.query("SELECT * FROM employees", viewFunction);
+    connection.query("SELECT first_name, last_name, title FROM employees LEFT JOIN role ON employees.role_id = role.id;", viewFunction);
 }
 
 const updateRole = () => {
-
+    connection.query("SELECT * FROM employees", (err, res) => {
+        if (err) throw err;
+        inquirer.prompt([
+            {
+                name: "employeeUpdate",
+                type: "rawlist",
+                choices: () => {
+                    let choiceArray = [];
+                    for (let i = 0; i < res.length; i++) {
+                        choiceArray.push(`Employee id: ${res[i].id}: ${res[i].first_name} ${res[i].last_name}`)
+                    }
+                    return choiceArray;
+                }
+            },
+            {
+                name: "newRole",
+                type: "input",
+                message: "What is their new role?"
+            }
+        ]).then(answer => {
+            connection.query(
+                "UPDATE employees SET ? WHERE ?",
+                [
+                    {
+                        role_id: parseInt(answer.newRole)
+                    },
+                    {
+                        id: answer.employeeUpdate
+                    }
+                ]
+            );
+        });
+        start();
+    });
 }
