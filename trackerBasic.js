@@ -60,7 +60,7 @@ const addDepartment = () => {
         }
     ]).then(answer => {
         connection.query(
-            "INSERT INTO department SET ?",
+            "INSERT INTO departments SET ?",
             {
                 name: answer.departmentAddInput
             },
@@ -74,11 +74,11 @@ const addDepartment = () => {
 }
 
 const addRole = () => {
-    connection.query("SELECT * FROM department", (err, res) => {
+    connection.query("SELECT * FROM departments", (err, res) => {
         if (err) throw err;
         inquirer.prompt([
             {
-                name: "roleAddInput",
+                name: "newRole",
                 type: "input",
                 message: "What is the role you want to add?"
             },
@@ -94,27 +94,34 @@ const addRole = () => {
                 }
             },
             {
-                name: "roleDepartmentId",
-                type: "rawlist",
-                choices: () => {
-                    let choiceArray = [];
-                    for (let i = 0; i < res.length; i++) {
-                        choiceArray.push(res[i].name);
-                    }
-                    return choiceArray;
+                name: "roleDeptId",
+                type: "list",
+                message: "Department?",
+                choices: function(answer) {
+                    return res.map(row => {
+                        return { name: row.name, value:row.id, short: row.name };
+                    });
                 }
             }
+            // {
+            //     name: "roleDeptId",
+            //     type: "list",
+            //     message: "Choose which department",
+            //     choices: () => {
+            //         const options = [];
+            //         for (let i = 0; i < res.length; i++) {
+            //             options.push(res[i].name);
+            //             console.log()
+            //         }
+            //     }
+            // }
         ]).then(answer => {
             connection.query(
-                "INSERT INTO role SET ?",
-                {
-                    title: answer.roleAddInput,
-                    Salary: answer.roleSalary,
-                    department_id: answer.roleDepartmentId
-                },
-                err => {
+                "INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)",
+                [answer.newRole, answer.roleSalary, answer.roleDeptId],
+                    err => {
                     if (err) throw err;
-                    console.log(`Successfully added ${roleAddInput} to Roles!`);
+                    console.log(`Successfully added ${answer.newRole} with a salary of ${answer.roleSalary}`);
                     start();
                 }
             );
@@ -123,42 +130,53 @@ const addRole = () => {
     }
 
 const addEmployee = () => {
-    connection.query("SELECT * FROM role", (err, res) => {
+    connection.query("SELECT * FROM roles", (err, res) => {
         if (err) throw err;
         inquirer.prompt([
             {
-                name: "employeeFirstName",
+                name: "firstName",
                 type: "input",
                 message: "What is the employees FIRST name?"
             },
             {
-                name: "employeeLastName",
+                name: "lastName",
                 type: "input",
                 message: "What is the employees LAST name?"
             },
             {
-                name: "employeeRoleId",
-                type: "rawlist",
-                choices: () => {
-                    let choiceArray = [];
-                    for (let i = 0; i < res.length; i++) {
-                        choiceArray.push(res[i].title);
-                    }
-                    return choiceArray;
-                },
-                message: "What is their role?"
+                name: "roleId",
+                type: "list",
+                message: "role?",
+                choices: function() {
+                    return res.map(role => {
+                        return{ name: role.title, value: role.id, short: role.title}
+                    });
+                }
             }
+            // {
+            //     name: "employeeRoleId",
+            //     type: "rawlist",
+            //     choices: () => {
+            //         let choiceArray = [];
+            //         for (let i = 0; i < res.length; i++) {
+            //             choiceArray.push(res[i].title);
+            //         }
+            //         return choiceArray;
+            //     },
+            //     message: "What is their role?"
+            // }
         ]).then(answer => {
             connection.query(
                 "INSERT INTO employees SET ?",
                 {
-                    first_name: answer.employeeFirstName,
-                    last_name: answer.employeeLastName,
-                    role_id: answer.employeeRoleId
+                    first_name: answer.firstName,
+                    last_name: answer.lastName,
+                    role_id: answer.roleId
                 },
                 err => {
                     if (err) throw err;
-                    console.log(`Successfully added ${answer.employeeFirstName} ${answer.employeeLastName} to Employees`);
+                    console.log(`Successfully added ${answer.firstName} ${answer.lastName} to Employees`);
+                    start();
                 }
             );
         });
@@ -173,24 +191,26 @@ const viewFunction = (err, res) => {
 }
 
 const viewDepartments = () => {
-    connection.query("SELECT * FROM department", viewFunction);
+    connection.query("SELECT * FROM departments", viewFunction);
 }
 
 const viewRoles = () => {
-    connection.query("SELECT * FROM role", viewFunction);
+    connection.query("SELECT * FROM roles", viewFunction);
 }
 
 const viewEmployees = () => {
-    connection.query("SELECT first_name, last_name, title FROM employees LEFT JOIN role ON employees.role_id = role.id;", viewFunction);
+    connection.query("SELECT first_name, last_name, title FROM employees LEFT JOIN roles ON employees.role_id = roles.id;", viewFunction);
 }
 
 const updateRole = () => {
     connection.query("SELECT * FROM employees", (err, res) => {
         if (err) throw err;
+        connection.query("SELECT * FROM roles")
         inquirer.prompt([
             {
                 name: "employeeUpdate",
-                type: "rawlist",
+                type: "list",
+                message: "Which employee?",
                 choices: () => {
                     let choiceArray = [];
                     for (let i = 0; i < res.length; i++) {
@@ -201,8 +221,11 @@ const updateRole = () => {
             },
             {
                 name: "newRole",
-                type: "input",
-                message: "What is their new role?"
+                type: "list",
+                message: "What is their new role?",
+                choices: () => {
+                    let choiceArray = [];
+                }
             }
         ]).then(answer => {
             connection.query(
