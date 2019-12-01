@@ -103,18 +103,6 @@ const addRole = () => {
                     });
                 }
             }
-            // {
-            //     name: "roleDeptId",
-            //     type: "list",
-            //     message: "Choose which department",
-            //     choices: () => {
-            //         const options = [];
-            //         for (let i = 0; i < res.length; i++) {
-            //             options.push(res[i].name);
-            //             console.log()
-            //         }
-            //     }
-            // }
         ]).then(answer => {
             connection.query(
                 "INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)",
@@ -153,18 +141,6 @@ const addEmployee = () => {
                     });
                 }
             }
-            // {
-            //     name: "employeeRoleId",
-            //     type: "rawlist",
-            //     choices: () => {
-            //         let choiceArray = [];
-            //         for (let i = 0; i < res.length; i++) {
-            //             choiceArray.push(res[i].title);
-            //         }
-            //         return choiceArray;
-            //     },
-            //     message: "What is their role?"
-            // }
         ]).then(answer => {
             connection.query(
                 "INSERT INTO employees SET ?",
@@ -175,7 +151,7 @@ const addEmployee = () => {
                 },
                 err => {
                     if (err) throw err;
-                    console.log(`Successfully added ${answer.firstName} ${answer.lastName} to Employees`);
+                    console.log(`Successfully added ${answer.firstName} ${answer.lastName}`);
                     start();
                 }
             );
@@ -203,43 +179,48 @@ const viewEmployees = () => {
 }
 
 const updateRole = () => {
-    connection.query("SELECT * FROM employees", (err, res) => {
+    connection.query("SELECT * FROM employees", (err, emp) => {
         if (err) throw err;
-        connection.query("SELECT * FROM roles")
-        inquirer.prompt([
-            {
-                name: "employeeUpdate",
-                type: "list",
-                message: "Which employee?",
-                choices: () => {
-                    let choiceArray = [];
-                    for (let i = 0; i < res.length; i++) {
-                        choiceArray.push(`Employee id: ${res[i].id}: ${res[i].first_name} ${res[i].last_name}`)
+        connection.query("SELECT * FROM roles", (err, role) => {
+            if (err) throw err;
+            inquirer.prompt([
+                {
+                    name: "employeeUpdate",
+                    type: "list",
+                    message: "Which employee?",
+                    choices: () => {
+                        return emp.map(employee => {
+                            return{ name: `${employee.first_name} ${employee.last_name}`, value: employee.id, short: employee.last_name };
+                        });
                     }
-                    return choiceArray;
-                }
-            },
-            {
-                name: "newRole",
-                type: "list",
-                message: "What is their new role?",
-                choices: () => {
-                    let choiceArray = [];
-                }
-            }
-        ]).then(answer => {
-            connection.query(
-                "UPDATE employees SET ? WHERE ?",
-                [
-                    {
-                        role_id: parseInt(answer.newRole)
-                    },
-                    {
-                        id: answer.employeeUpdate
+                },
+                {
+                    name: "newRole",
+                    type: "list",
+                    message: "What is their new role?",
+                    choices: () => {
+                        return role.map(updRole => {
+                            return{ name: updRole.title, value: updRole.id, short: updRole.title };
+                        });
                     }
-                ]
-            );
+                }
+            ]).then(answer => {
+                connection.query(
+                    "UPDATE employees SET ? WHERE ?",
+                    [
+                        {
+                            role_id: answer.newRole
+                        },
+                        {
+                            id: answer.employeeUpdate
+                        }
+                    ],
+                    err => {
+                        if (err) throw err;
+                        start();
+                    }
+                    );
+            });
         });
-        start();
     });
 }
