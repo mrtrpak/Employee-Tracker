@@ -1,7 +1,7 @@
 # Employee-Tracker
 
 ## Synopsis 
-This app is designed to allow the user to view and track employees, departments, and roles. This app is an easy way to keep track of employees with their job title and salary. This also allows to add new departments, employees and roles to keep up to date with an ever growing and changing workforce.
+This app is designed to allow the user to view and track employees, departments, and roles. This app is an easy way to keep track of employees with their job title and salary. This also allows to add new departments, employees and roles to keep up to date with an ever growing and changing workforce. I have been able to add in the capability to update an employee's role from the given set of roles available. Of course you could add a new role and then assign an employee that new role created. 
 
 ## What I learned
 While creating this app I was able to learn new tools which I will be able to incorporate into future applications. I learned how to reference 2 different mysql tables to grab information from them both. I learned how to setup a database with multiple tables and how to show those tables within node. I was able to update mysql tables based on user prompts using inquirer. I can now save user input into a database and call that new data as well as the existing data.
@@ -12,10 +12,13 @@ The most difficult part of this app for me was to figure out how to reference 2 
 ## App Gif
 ![Gif of Application](/gifs/employeeAppDemo.gif)
 
-Demo of Adding Employee and Role
+### Demo of Adding Employee and Role
 ![Gif of addDemo](/gifs/addDemo.gif)
 
-Demo of Viewing Roles, Employees and Departments
+### Demo of Viewing Roles, Employees and Departments
 ![Gif of viewDemo](/gifs/viewDemo.gif)
+
+### Demo of adding a new employee and then going in and changing their role
+![Gif of updateRole](/gifs/updateRole.gif)
 
 
