@@ -9,6 +9,10 @@ While creating this app I was able to learn new tools which I will be able to in
 ## Difficulties
 The most difficult part of this app for me was to figure out how to reference 2 different tables into another separate table and that is something I will be working further with to understand and master. I had a tough time getting the add a role and add an employee function to work. The issue I had was in my database the department_id and role_id needed to be an integer, but the answer I had been generating was a string. Once I changed the setup of the question into a list input and then I was able to use map to get the info I needed and it was able to function.
 
+## Tools Used
+- inquirer
+- MySql
+
 ## App Gif
 ![Gif of Application](/gifs/employeeAppDemo.gif)
 
