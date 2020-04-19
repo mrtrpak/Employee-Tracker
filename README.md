@@ -4,7 +4,7 @@
 
 - [Synopsis](#Synopsis)
 - [What I learned](#What-I-learned)
-- [Difficulties](#Difficulities)
+- [Difficulties](#Difficulties)
 - [Tools Used](#Tools-Used)
 - [App Gif](#App-Gif)
 - [Add Employee Demo](#Demo-of-Adding-Employee-and-Role)
