@@ -1,5 +1,16 @@
 # Employee-Tracker
 
+## Table of Contents
+
+- [Synopsis](#Synopsis)
+- [What I learned](#What-I-learned)
+- [Difficulties](#Difficulities)
+- [Tools Used](#Tools-Used)
+- [App Gif](#App-Gif)
+- [Add Employee Demo](#Demo-of-Adding-Employee-and-Role)
+- [Viewing Demo](#Demo-of-Viewing-Roles,-Employees-and-Departments)
+- [Changing Role Demo](#Demo-of-adding-a-new-employee-and-then-going-in-and-changing-their-role)
+
 ## Synopsis 
 This app is designed to allow the user to view and track employees, departments, and roles. This app is an easy way to keep track of employees with their job title and salary. This also allows to add new departments, employees and roles to keep up to date with an ever growing and changing workforce. I have been able to add in the capability to update an employee's role from the given set of roles available. Of course you could add a new role and then assign an employee that new role created. 
 
@@ -12,7 +23,6 @@ The most difficult part of this app for me was to figure out how to reference 2 
 ## Tools Used
 - inquirer
 - MySql
-
 ## App Gif
 ![Gif of Application](/gifs/employeeAppDemo.gif)
 
