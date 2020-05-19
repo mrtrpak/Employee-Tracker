@@ -3,6 +3,7 @@
 ## Table of Contents
 
 - [Synopsis](#Synopsis)
+- [Start Application](#How-to-Use)
 - [What I learned](#What-I-learned)
 - [Difficulties](#Difficulties)
 - [Tools Used](#Tools-Used)
